@@ -17,15 +17,15 @@ if($fileSize > 0){
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST["title"];
     $content = $_POST["content"];
-    $iconPath = $_POST["iconPath"];
+    $iconData = $_POST["iconData"];
     $recieverUUID = $_POST["recieverUUID"];
     $sender = $_POST["sender"];
 
-    //$struct = new Notification(base64_encode($title), base64_encode($content), base64_encode($iconPath), base64_encode($recieverUUID), base64_encode($sender), base64_encode(0));
+    //$struct = new Notification(base64_encode($title), base64_encode($content), base64_encode($iconData), base64_encode($recieverUUID), base64_encode($sender), base64_encode(0));
     $struct = new stdClass();
     $struct->title = base64_encode($title);
     $struct->content = base64_encode($content);
-    $struct->iconPath = base64_encode($iconPath);
+    $struct->iconData = base64_encode($iconData);
     $struct->recieverUUID = base64_encode($recieverUUID);
     $struct->sender = base64_encode($sender);
     $struct->id = base64_encode(0);
@@ -62,7 +62,7 @@ if($fileSize > 0){
       
       if(base64_decode($notification->recieverUUID) === $uuid){
         $notifications[] = $notification;
-        unset($json->data->unhandledNotifications[$i]);
+        //unset($json->data->unhandledNotifications[$i]);
       }
       $i++;
     }
