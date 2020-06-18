@@ -62,7 +62,7 @@ if($fileSize > 0){
       
       if(base64_decode($notification->recieverUUID) === $uuid){
         $notifications[] = $notification;
-        //unset($json->data->unhandledNotifications[$i]);
+        unset($json->data->unhandledNotifications[$i]);
       }
       $i++;
     }

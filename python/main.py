@@ -1,3 +1,4 @@
+import sys
 import tempfile
 import platform
 import base64
@@ -57,12 +58,13 @@ with tempfile.TemporaryDirectory() as directory:
                 writeData = requests.get(iconData).content
             else:
                 utfDecoded = iconData.decode("utf-8")
-                beginDataIndex = utfDecoded.rindex(",") + 1
-                description = utfDecoded[:beginDataIndex]
-                print(description + "(" + content + ")")
-                data = utfDecoded[beginDataIndex:]
-                if "icon" in description:
-                    writeData = base64.b64decode(data)
+                if "," in utfDecoded:
+                    beginDataIndex = utfDecoded.rindex(",") + 1
+                    description = utfDecoded[:beginDataIndex]
+                    print(description + "(" + content + ")")
+                    data = utfDecoded[beginDataIndex:]
+                    if "icon" in description:
+                        writeData = base64.b64decode(data)
 
             # delete file when existing
             if os.path.exists(filePath):
@@ -77,17 +79,18 @@ with tempfile.TemporaryDirectory() as directory:
             # send notification
             notification.notify(
                 app_name="Notifier",
-                title="title",
-                message="content",
-                app_icon="icon.ico",  # e.g. 'C:\\icon_32x32.ico'
-                timeout=15,
-                ticker="null",
+                title=title,
+                message=content,
+                app_icon=filePath,  # e.g. 'C:\\icon_32x32.ico'
+                timeout=waitDelayInSec,
             )
             # notify.notify(content, title, filepath, True, 5, notify.dwInfoFlags.NIIF_USER | notify.dwInfoFlags.NIIF_LARGE_ICON)
             # toaster.show_toast(title=title,
             #             msg=content,
             #             icon_path=filepath,
             #             duration=None)
-            time.sleep(5)
-        print(".")
+            time.sleep(waitDelayInSec + 1)
+        time.sleep(waitDelayInSec)
+        print("---------------------------------------")
+
 # notify.uninit()
