@@ -21,16 +21,31 @@ if($fileSize > 0){
     $recieverUUID = $_POST["recieverUUID"];
     $sender = $_POST["sender"];
 
-    $struct;
-    $struct->title = $title;
-    $struct->content = $content;
-    $struct->iconPath = $iconPath;
-    $struct->recieverUUID = $recieverUUID;
-    $struct->sender = $sender;
-    $struct->id = 0;
+    //$struct = new Notification(base64_encode($title), base64_encode($content), base64_encode($iconPath), base64_encode($recieverUUID), base64_encode($sender), base64_encode(0));
+    $struct = new stdClass();
+    $struct->title = base64_encode($title);
+    $struct->content = base64_encode($content);
+    $struct->iconPath = base64_encode($iconPath);
+    $struct->recieverUUID = base64_encode($recieverUUID);
+    $struct->sender = base64_encode($sender);
+    $struct->id = base64_encode(0);
 
-    array_push($json->data->unhandledNotifications, $struct);
-    echo "Successfully addedd Notification";
+    $arr = [];
+    array_push($arr, $struct);
+    foreach($json->data->unhandledNotifications as $not){
+      array_push($arr, $not);
+    }
+
+    $json->data->unhandledNotifications = $arr;
+    echo "Successfully added Notification";
+
+    //save file
+    $content = json_encode($json);
+    $encoded = base64_encode($content);
+    $newFileContent = $encodedSignal . $encoded;
+    $file = fopen($filePath, "w") or die("Unable to open file!");
+    fwrite($file, $newFileContent);
+    fclose($file);
   }else{
     $pcName = base64_decode($_GET["pcname"]);
     $uuids = $json->data->pcs;
@@ -40,21 +55,26 @@ if($fileSize > 0){
         $uuid = $pc->uuid;
       }
     }
-    $notifications = [];
+    $notifications = array();
     $unhandledNotifications = $json->data->unhandledNotifications;
+    $i = 0;
     foreach($unhandledNotifications as &$notification){
-      if($notification->recieverUUID === $uuid){
-        array_push($notifications, $notification);
+      
+      if(base64_decode($notification->recieverUUID) === $uuid){
+        $notifications[] = $notification;
+        unset($json->data->unhandledNotifications[$i]);
       }
+      $i++;
     }
     echo json_encode($notifications);
-  }
 
-  $content = json_encode($json);
-  $encoded = base64_encode($content);
-  $newFileContent = $encodedSignal . $encoded;
-  $file = fopen($filePath, "w") or die("Unable to open file!");
-  fwrite($file, $newFileContent);
-  fclose($file);
+
+    $content = json_encode($json);
+    $encoded = base64_encode($content);
+    $newFileContent = $encodedSignal . $encoded;
+    $file = fopen($filePath, "w") or die("Unable to open file!");
+    fwrite($file, $newFileContent);
+    fclose($file);
+  }
 }
 ?>
