@@ -10,6 +10,7 @@ from plyer import notification
 import notify
 #from win10toast_persist import ToastNotifier
 from win10toast import ToastNotifier
+from PIL import Image
 import shutil
 import wget
 
@@ -43,7 +44,6 @@ with tempfile.TemporaryDirectory() as directory:
         notifications = r.json()
 
         for notifi in notifications:
-            print(notifi)
             # decode json data
             receiverUUID = base64Decode(notifi["recieverUUID"])
             iconData = base64Decode(notifi["iconData"])
@@ -58,9 +58,20 @@ with tempfile.TemporaryDirectory() as directory:
             writeData = "".encode("utf-8")
             if iconData[:4] == "http":
                 writeData = requests.get(iconData).content
-                print(True)
+                if "png" in iconData:
+                    pngFile = "temp.png"
+                    pngPath = directory + "\\" + pngFile
+                    open(pngPath, 'wb').write(writeData)
+                    img = Image.open(pngPath)
+                    img.save(filePath)
+                    os.remove(pngPath)
+                else:
+                    # delete file when existing
+                    if os.path.exists(filePath):
+                        os.remove(filePath)
+                    # write image in file
+                    open(filePath, 'wb').write(writeData)
             else:
-                print(False)
                 utfDecoded = iconData.decode("utf-8")
                 if "," in utfDecoded:
                     beginDataIndex = utfDecoded.rindex(",") + 1
@@ -69,12 +80,12 @@ with tempfile.TemporaryDirectory() as directory:
                     data = utfDecoded[beginDataIndex:]
                     if "icon" in description:
                         writeData = base64.b64decode(data)
+                    # delete file when existing
+                    if os.path.exists(filePath):
+                        os.remove(filePath)
+                    # write image in file
+                    open(filePath, 'wb').write(writeData)
 
-            # delete file when existing
-            if os.path.exists(filePath):
-                os.remove(filePath)
-            # write image in file
-            open(filePath, 'wb').write(writeData)
             # set filepath to NUll if no image is written
             if writeData == "".encode("utf-8"):
                 filePath = None
@@ -89,11 +100,11 @@ with tempfile.TemporaryDirectory() as directory:
             #    timeout=waitDelayInSec,
             #)
             #notify.notify(content, title, filePath, True, 5, notify.dwInfoFlags.NIIF_USER | notify.dwInfoFlags.NIIF_LARGE_ICON)
-            print(filePath)
             toaster.show_toast(title=title,
                          msg=content,
                          icon_path=filePath,
                          duration=10)
+            os.remove(filePath)
         time.sleep(waitDelayInSec)
 
 # notify.uninit()

@@ -7,5 +7,6 @@ services:
         ports:
             - "80:80"
         container_name: PHP_Server
+        image: universumgames/notifier_web
         volumes:
             - ./server:/var/www/html/

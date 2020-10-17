@@ -48,8 +48,8 @@ if ($fileSize > 0) {
     $file = fopen($filePath, "w") or die("Unable to open file!");
     fwrite($file, $content);
     fclose($file);
-    //header("Location: /create.html");
-    //die();
+    header("Location: /create.html");
+    die();
   } else {
     $encodedPCName = $_GET["pcname"];
     if ($encodedPCName === "") {
