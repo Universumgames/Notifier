@@ -8,12 +8,13 @@ import os
 import time
 from plyer import notification
 import notify
-from win10toast_persist import ToastNotifier
+#from win10toast_persist import ToastNotifier
+from win10toast import ToastNotifier
 import shutil
 import wget
 
 websiteAddress = "localhost"
-waitDelayInSec = 5
+waitDelayInSec = 1
 
 
 def notificationClick():
@@ -28,23 +29,24 @@ def base64Decode(toDecode):
     return base64.b64decode(toDecode.encode("utf-8")).decode("utf-8")
 
 
-# notify.init('E:/tommy/Programming/Python/Notifier/python/icon.ico', notificationClick)
-# toaster = ToastNotifier()
+#notify.init('E:/tommy/Programming/Python/Notifier/python/icon.ico', notificationClick)
+toaster = ToastNotifier()
 with tempfile.TemporaryDirectory() as directory:
     # if True:
     while True:
         pcName = platform.node()
         encodedName = base64Encode(pcName)
-        address = f'http://{websiteAddress}/?pcname={encodedName}'
+        address = f'http://{websiteAddress}/?pcname={pcName}'
         r = requests.get(address)
         # text = r.text.replace("<html>", "").replace("</html>", "").replace("<head>", "").replace("</head>",
         # "").replace("<body>", "").replace("</body>", "")
         notifications = r.json()
 
         for notifi in notifications:
+            print(notifi)
             # decode json data
             receiverUUID = base64Decode(notifi["recieverUUID"])
-            iconData = base64.b64decode(notifi["iconData"])
+            iconData = base64Decode(notifi["iconData"])
             title = base64Decode(notifi["title"])
             content = base64Decode(notifi["content"])
             id = base64Decode(notifi["id"])
@@ -56,7 +58,9 @@ with tempfile.TemporaryDirectory() as directory:
             writeData = "".encode("utf-8")
             if iconData[:4] == "http":
                 writeData = requests.get(iconData).content
+                print(True)
             else:
+                print(False)
                 utfDecoded = iconData.decode("utf-8")
                 if "," in utfDecoded:
                     beginDataIndex = utfDecoded.rindex(",") + 1
@@ -77,20 +81,19 @@ with tempfile.TemporaryDirectory() as directory:
 
             # if filePath is not None:
             # send notification
-            notification.notify(
-                app_name="Notifier",
-                title=title,
-                message=content,
-                app_icon=filePath,  # e.g. 'C:\\icon_32x32.ico'
-                timeout=waitDelayInSec,
-            )
-            # notify.notify(content, title, filepath, True, 5, notify.dwInfoFlags.NIIF_USER | notify.dwInfoFlags.NIIF_LARGE_ICON)
-            # toaster.show_toast(title=title,
-            #             msg=content,
-            #             icon_path=filepath,
-            #             duration=None)
-            time.sleep(waitDelayInSec + 1)
+            #notification.notify(
+            #    app_name="Notifier",
+            #    title=title,
+            #    message=content,
+            #    app_icon=filePath,  # e.g. 'C:\\icon_32x32.ico'
+            #    timeout=waitDelayInSec,
+            #)
+            #notify.notify(content, title, filePath, True, 5, notify.dwInfoFlags.NIIF_USER | notify.dwInfoFlags.NIIF_LARGE_ICON)
+            print(filePath)
+            toaster.show_toast(title=title,
+                         msg=content,
+                         icon_path=filePath,
+                         duration=10)
         time.sleep(waitDelayInSec)
-        print("---------------------------------------")
 
 # notify.uninit()

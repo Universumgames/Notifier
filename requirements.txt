@@ -1,0 +1,6 @@
+php
+requests~=2.24.0
+notify~=0.3.1
+wget~=3.2
+plyer~=1.4.3
+win10toast~=0.9

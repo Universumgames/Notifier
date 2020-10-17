@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title>Create Notification</title>
   </head>
+
   <body>
     <form action="index.php" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
-      Title <input type="text" name="title"><br>
-      Content <input type="text" name="content"><br>
-      Icon Data <input type="text" name="iconData"><br>
-      Reciever UUID <input type="text" name="recieverUUID"><br>
-      Sender <input type="text" name="sender"><br>
+      <label>Title </label><input type="text" name="title"><br>
+      <label>Content </label><input type="text" name="content"><br>
+      <label>Icon Data </label><input type="file" name="iconData"><br>
+      <label>Reciever UUID </label><input type="text" name="recieverUUID"><br>
+      <label>Sender </label><input type="text" name="sender"><br>
       <input type="submit">
     </form>
   </body>
+
 </html>
