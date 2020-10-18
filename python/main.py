@@ -8,14 +8,12 @@ import os
 import time
 from plyer import notification
 import notify
-#from win10toast_persist import ToastNotifier
-from win10toast import ToastNotifier
+from win10toast_persist import ToastNotifier
+#from win10toast import ToastNotifier
 from PIL import Image
 import shutil
 import wget
-from .config import *
-
-
+import config
 
 
 def notificationClick():
@@ -37,7 +35,7 @@ with tempfile.TemporaryDirectory() as directory:
     while True:
         pcName = platform.node()
         encodedName = base64Encode(pcName)
-        address = f'http://{websiteAddress}:{websitePort}/?pcname={pcName}'
+        address = f'http://{config.websiteAddress}:{config.websitePort}/?pcname={pcName}'
         r = requests.get(address)
         # text = r.text.replace("<html>", "").replace("</html>", "").replace("<head>", "").replace("</head>",
         # "").replace("<body>", "").replace("</body>", "")
@@ -92,19 +90,12 @@ with tempfile.TemporaryDirectory() as directory:
 
             # if filePath is not None:
             # send notification
-            #notification.notify(
-            #    app_name="Notifier",
-            #    title=title,
-            #    message=content,
-            #    app_icon=filePath,  # e.g. 'C:\\icon_32x32.ico'
-            #    timeout=waitDelayInSec,
-            #)
-            #notify.notify(content, title, filePath, True, 5, notify.dwInfoFlags.NIIF_USER | notify.dwInfoFlags.NIIF_LARGE_ICON)
+            title = title + " by " + sender
             toaster.show_toast(title=title,
                          msg=content,
                          icon_path=filePath,
-                         duration=10)
+                         duration=None)
             os.remove(filePath)
-        time.sleep(waitDelayInSec)
+        time.sleep(config.waitDelayInSec)
 
 # notify.uninit()
