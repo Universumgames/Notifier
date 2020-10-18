@@ -13,9 +13,9 @@ from win10toast import ToastNotifier
 from PIL import Image
 import shutil
 import wget
+from .config import *
 
-websiteAddress = "localhost"
-waitDelayInSec = 1
+
 
 
 def notificationClick():
@@ -37,7 +37,7 @@ with tempfile.TemporaryDirectory() as directory:
     while True:
         pcName = platform.node()
         encodedName = base64Encode(pcName)
-        address = f'http://{websiteAddress}/interactive.php?pcname={pcName}'
+        address = f'http://{websiteAddress}:{websitePort}/?pcname={pcName}'
         r = requests.get(address)
         # text = r.text.replace("<html>", "").replace("</html>", "").replace("<head>", "").replace("</head>",
         # "").replace("<body>", "").replace("</body>", "")
