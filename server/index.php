@@ -48,9 +48,9 @@ if ($fileSize > 0) {
     $file = fopen($filePath, "w") or die("Unable to open file!");
     fwrite($file, $content);
     fclose($file);
-    header("Location: /create.html");
+    header("Location: /");
     die();
-  } else {
+  } else if(isset($_GET["pcname"])){
     $encodedPCName = $_GET["pcname"];
     if ($encodedPCName === "") {
       echo $json;
@@ -86,5 +86,7 @@ if ($fileSize > 0) {
       fwrite($file, $content);
       fclose($file);
     }
+  }else{
+    echo file_get_contents("index.html");
   }
 }

