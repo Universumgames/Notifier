@@ -48,7 +48,7 @@ if ($fileSize > 0) {
     $file = fopen($filePath, "w") or die("Unable to open file!");
     fwrite($file, $content);
     fclose($file);
-    header("Location: /");
+    header("Location: ./");
     die();
   } else if(isset($_GET["pcname"])){
     $encodedPCName = $_GET["pcname"];
@@ -87,6 +87,6 @@ if ($fileSize > 0) {
       fclose($file);
     }
   }else{
-    echo file_get_contents("index.html");
+    echo file_get_contents("create.html");
   }
 }
