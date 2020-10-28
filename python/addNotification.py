@@ -1,6 +1,7 @@
 import sys
 import requests
 import base64
+import config
 
 def base64Encode(content):
   return base64.b64encode(content.encode('utf-8')).decode('utf-8')
@@ -8,7 +9,7 @@ def base64Encode(content):
 def base64Decode(content):
   return base64.b64decode(content).decode("utf-8")
 
-url = "http://bananapi.home.net"
+url = f'http://{config.websiteAddress}:{config.websitePort}{config.websiteDir}'
 
 title = ""
 content = ""

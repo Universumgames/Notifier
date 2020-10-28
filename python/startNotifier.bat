@@ -1,1 +1,3 @@
-python3 ./main.py
+:loop
+	python3 %~dp0main.py
+	goto loop

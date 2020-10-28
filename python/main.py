@@ -69,7 +69,7 @@ with tempfile.TemporaryDirectory() as directory:
                         os.remove(filePath)
                     # write image in file
                     open(filePath, 'wb').write(writeData)
-            else:
+            elif iconData != "":
                 utfDecoded = iconData.decode("utf-8")
                 if "," in utfDecoded:
                     beginDataIndex = utfDecoded.rindex(",") + 1
