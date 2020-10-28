@@ -1,1 +1,1 @@
-{"data":{"pcs":[{"name":"GamingPC-Tom","uuid":"quadro"},{"name":"SurfaceTom","uuid":"sette"}],"unhandledNotifications":[]}}
+{ "data": { "pcs": [{ "name": "pc1", "uuid": "quadro" }, { "name": "pc2", "uuid": "sette" }], "unhandledNotifications": [] } }
